@@ -26,6 +26,7 @@ This pipeline enables real-time financial analytics for:
 ## 🚀 Key Features
 
 - **Real-time Data Ingestion**: 5-second intervals from Alpha Vantage API
+
 - **Scalable Architecture**: Kafka for message queuing and fault tolerance
 - **Data Lake Integration**: S3 as cost-effective storage layer
 - **Data Warehouse**: Snowflake for analytical queries and BI
@@ -98,10 +99,6 @@ Stock_data_pipeline/
 - **Kafka → S3**: Near real-time (seconds)
 - **Streamlit Refresh**: 30-second intervals to balance responsiveness and cost
 
-### API Rate Limiting
-- Alpha Vantage: 5 calls/minute for free tier
-- Implement exponential backoff and retry logic
-- Consider paid tiers for production use
 
 ### Cost Optimizations
 - S3 Intelligent Tiering for automatic cost savings

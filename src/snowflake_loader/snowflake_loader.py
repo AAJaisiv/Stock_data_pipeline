@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Snowflake Data Loader
-Sets up external stages and loads stock data from S3 into Snowflake tables.
+Sets up external stages and loads stock data from S3 into Snowflake(data warehouse) tables.
 """
 
 import os
@@ -126,7 +126,7 @@ class SnowflakeLoader:
             """
             self.execute_query(file_format_sql)
 
-            # Only create integration and stage if role is ACCOUNTADMIN
+            # Only create integration and stage if role is ACCOUNTADMIN(this can be done in snowflake worksh)
             if self.role.upper() == "ACCOUNTADMIN":
                 self.create_storage_integration()
                 stage_sql = f"""

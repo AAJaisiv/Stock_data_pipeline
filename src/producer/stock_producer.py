@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Stock Data Kafka Producer
-Fetches real-time stock data from Alpha Vantage API and sends to Kafka topics.
+Fetches real-time stock data from two APIs using round robin strategy and sends to Kafka topics.
 """
 
 import os
@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Configure logging
+# Configuring logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -75,7 +75,7 @@ def fetch_from_twelvedata(symbol, api_key):
     return None
 
 class StockDataProducer:
-    """Kafka producer for stock market data"""
+    """the producer for stock market data"""
     
     def __init__(self):
         self.finnhub_api_key = os.getenv('FINNHUB_API_KEY')
@@ -97,7 +97,7 @@ class StockDataProducer:
         
         # Rate limiting (Alpha Vantage free tier: 5 calls/minute)
         self.last_api_call = {}
-        self.min_interval = 12  # seconds between calls per symbol
+        self.min_interval = 12  # seconds(interval) between calls per symbol
         
         logger.info(f"Initialized producer for symbols: {self.stock_symbols}")
     
@@ -106,7 +106,7 @@ class StockDataProducer:
         data = fetch_from_finnhub(symbol, self.finnhub_api_key)
         if data:
             return data
-        # If Finnhub fails, try Twelve Data
+        # If Finnhub API fails, try Twelve Data(round robin strategy)
         data = fetch_from_twelvedata(symbol, self.twelvedata_api_key)
         if data:
             return data
@@ -139,7 +139,7 @@ class StockDataProducer:
         symbol = stock_data['symbol']
         close_price = stock_data['close']
         
-        # Define alert thresholds (in practice, these would come from a database)
+        # Defining alert thresholds (in practice these would come from a database)
         thresholds = {
             'AAPL': {'high': 200, 'low': 150},
             'MSFT': {'high': 400, 'low': 300},
@@ -203,7 +203,7 @@ class StockDataProducer:
                     self.process_symbol(symbol)
                     time.sleep(1)  # Small delay between symbols
                 
-                # Wait before next cycle (5 seconds as specified)
+                # Wait before next cycle (5 seconds)
                 logger.info("Completed cycle, waiting 5 seconds...")
                 time.sleep(5)
                 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Test Stock Data Producer (Local Testing)
-Fetches real-time stock data from Alpha Vantage API for testing.
+Fetches real-time stock data from Alpha Vantage API for testing
+Tested this on Sunday as market was closed.
 """
 
 import os
@@ -13,7 +14,7 @@ from datetime import datetime
 from typing import Dict, Optional
 from dotenv import load_dotenv
 
-# Load environment variables
+# Loading environment variables
 load_dotenv()
 
 # Configure logging to console only for testing
@@ -42,7 +43,7 @@ class TestStockDataProducer:
         self.min_interval = 12  # seconds between calls per symbol
         
         logger.info(f"Initialized test producer for symbols: {self.stock_symbols}")
-        logger.info(f"API Key: {self.api_key[:8]}...")  # Show first 8 chars
+        logger.info(f"API Key: {self.api_key[:8]}...")  #to Show first 8 chars
     
     def get_stock_data(self, symbol: str) -> Optional[Dict]:
         """Fetch stock data from Alpha Vantage API"""
@@ -71,7 +72,7 @@ class TestStockDataProducer:
             data = response.json()
             self.last_api_call[symbol] = time.time()
             
-            # Check for API errors
+            # Checking for API errors
             if 'Error Message' in data:
                 logger.error(f"API Error for {symbol}: {data['Error Message']}")
                 return None
@@ -90,7 +91,7 @@ class TestStockDataProducer:
             latest_timestamp = max(time_series.keys())
             latest_data = time_series[latest_timestamp]
             
-            # Prepare stock data message
+            # Prepare stock data messages
             stock_message = {
                 'symbol': symbol,
                 'timestamp': latest_timestamp,
@@ -137,7 +138,7 @@ class TestStockDataProducer:
         logger.info(" Starting test producer...")
         
         try:
-            # Testing API connection
+            # Testing the API connection
             if self.test_api_connection():
                 logger.info("All tests passed! Producer is ready for deployment.")
             else:
