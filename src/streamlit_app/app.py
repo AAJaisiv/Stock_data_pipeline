@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Real-time Stock Analysis Dashboard
-Streamlit app for visualizing real-time stock data from S3.
+Streamlit app for visualizing real-time stock data.
 """
 
 import os
@@ -66,7 +66,7 @@ if not files:
     st.stop()
 file = st.sidebar.selectbox("Select a file to view", files)
 
-# Stock filter (if present)
+# Stock filter
 df = read_parquet_from_s3(S3_BUCKET, file)
 if "symbol" in df.columns:
     stock_list = sorted(df["symbol"].unique())
@@ -136,7 +136,7 @@ else:
 
 # Color-coded alert types (if present)
 if "alert_type" in filtered_df.columns:
-    st.subheader("🚨 Alerts")
+    st.subheader("Alerts")
     for idx, row in filtered_df.iterrows():
         alert = row["alert_type"]
         symbol = row["symbol"] if "symbol" in row else ""
@@ -162,7 +162,7 @@ def plot_line_chart(df):
         chart_df = df.copy()
         chart_df["timestamp"] = pd.to_datetime(chart_df["timestamp"])
         chart_df = chart_df.sort_values("timestamp")
-        st.subheader("📈 Stock Performance Over Time")
+        st.subheader("Stock Performance Over Time")
         if "close" in chart_df.columns:
             st.line_chart(chart_df.set_index("timestamp")["close"])
         else:
